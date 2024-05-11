@@ -4,10 +4,7 @@ const { createHandler } = require('graphql-http/lib/use/express');
 const schema = require('./graphql/Schema');
 const resolvers = require('./graphql/Resolvers');
 
-mongoose.connect('mongodb://localhost:27017/kp-rest-app', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb://localhost:27017/kp-rest-app');
 
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB');
