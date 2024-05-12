@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Invoice = require("../models/Invoice");
 
 const resolvers = {
     // User
@@ -41,7 +42,7 @@ const resolvers = {
     },
     deleteUser: async ({ id }) => {
         try {
-            const user = await User.findByIdAndRemove(id);
+            const user = await User.findByIdAndDelete(id);
             return user;
         } catch (err) {
             throw new Error("Error deleting user");
@@ -64,20 +65,20 @@ const resolvers = {
             throw new Error("Error retrieving invoices");
         }
     },
-    createInvoice: async ({ amount, paid_at, user }) => {
+    createInvoice: async ({ amount, paid_at, customer }) => {
         try {
-            const invoice = new Invoice({ amount, paid_at, user });
+            const invoice = new Invoice({ amount, paid_at, customer });
             await invoice.save();
             return invoice;
         } catch (err) {
-            throw new Error("Error creating invoice");
+            throw new Error("Error creating invoice: " + err);
         }
     },
-    updateInvoice: async ({ id, amount, paid_at, user }) => {
+    updateInvoice: async ({ id, amount, paid_at, customer }) => {
         try {
             const invoice = await Invoice.findByIdAndUpdate(
                 id,
-                { amount, paid_at, user },
+                { amount, paid_at, customer },
                 { new: true }
             );
             return invoice;
@@ -87,7 +88,7 @@ const resolvers = {
     },
     deleteInvoice: async ({ id }) => {
         try {
-            const invoice = await Invoice.findByIdAndRemove(id);
+            const invoice = await Invoice.findByIdAndDelete(id);
             return invoice;
         } catch (err) {
             throw new Error("Error deleting invoice");
