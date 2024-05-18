@@ -1,12 +1,22 @@
 const   express     = require("express"),
         router      = express.Router(),
         resolvers   = require('../graphql/Resolvers'),
-        xml2js      = require('xml2js');
+        xml2js      = require('xml2js'),
+        { authenticate } = require('ldap-authentication');
 
 
 // Get users
 router.get('/', async (req, res) => {
     try {
+        let authenticated = await authenticate({
+            ldapOpts: { url: 'ldap://192.168.1.11' },
+            userDn: 'uid=janez,dc=sk-01,dc=com',
+            userPassword: 'janez123',
+        });
+
+        console.log("AUTHENTICATE")
+        console.log(authenticated)
+
         const users = await resolvers.getUsers();
         res.json(users);
     } catch (error) {
