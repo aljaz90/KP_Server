@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     try {
         let authenticated = await authenticate({
             ldapOpts: { url: 'ldap://192.168.1.11' },
-            userDn: 'uid=janez,dc=sk-01,dc=com',
+            userDn: 'uid=janez,ou=People,dc=sk-01,dc=com',
             userPassword: 'janez123',
         });
 
@@ -20,6 +20,8 @@ router.get('/', async (req, res) => {
         const users = await resolvers.getUsers();
         res.json(users);
     } catch (error) {
+        console.log("error")
+        console.log(error)
         res.status(500);
         res.send(error);
     }
