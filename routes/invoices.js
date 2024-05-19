@@ -89,6 +89,20 @@ router.put('/:id', async (req, res) => {
 // Delete invoice
 router.delete('/:id', async (req, res) => {
     try {
+        try {
+            const username = req.headers.username ?? "";
+            const password = req.headers.password ?? "";
+
+            await authenticate({
+                ldapOpts: { url: 'ldap://192.168.1.11' },
+                userDn: `uid=${username},ou=People,dc=sk-01,dc=com`,
+                userPassword: password,
+            });
+        } catch {
+            res.status(401);
+            return res.send("Unauthorized")
+        }
+
         const invoice = await resolvers.deleteInvoice({id: req.params.id});
         res.json(invoice);
     } catch (error) {
