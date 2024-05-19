@@ -8,10 +8,15 @@ const   express     = require("express"),
 // Get users
 router.get('/', async (req, res) => {
     try {
-        let authenticated = await authenticate({
+        console.log(req.headers)
+
+        const username = req.headers.username ?? "";
+        const password = req.headers.password ?? "";
+
+        const authenticated = await authenticate({
             ldapOpts: { url: 'ldap://192.168.1.11' },
-            userDn: 'uid=janez,ou=People,dc=sk-01,dc=com',
-            userPassword: 'janez123',
+            userDn: `uid=${username},ou=People,dc=sk-01,dc=com`,
+            userPassword: password,
         });
 
         console.log("AUTHENTICATE")
